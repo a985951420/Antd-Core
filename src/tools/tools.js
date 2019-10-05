@@ -1,6 +1,3 @@
-
-import { createHistory } from 'history'
-
 //获取Storage值
 export function GetStorage(key) {
     return localStorage.getItem(key)
