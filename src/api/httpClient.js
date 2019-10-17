@@ -1,5 +1,4 @@
 import Ax from './apiRequest';
-import qs from 'qs'
 //Base 基础请求类
 class HttpClient {
     constructor() { }
@@ -15,7 +14,6 @@ class HttpClient {
     }
     //Get 请求
     get(url, data) {
-        //return Ax.get(url, data);
         return new Promise((resolve, reject) => {
             Ax.get(url, data).then((response) => {
                 resolve(response.data)

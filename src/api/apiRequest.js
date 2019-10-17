@@ -1,6 +1,9 @@
 import axios from 'axios';
+import { message } from 'antd';
 import { GetStorage } from '../tools/tools'
-axios.defaults.withCredentials = true;
+const antdMessage = message;
+
+//axios.defaults.withCredentials = true;
 axios.defaults.crossDomain = true;
 axios.defaults.headers.post['Accept'] = '*/*'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
@@ -15,24 +18,38 @@ axios.interceptors.request.use(config => {
     return Promise.resolve(err);
 })
 axios.interceptors.response.use(data => {
+    debugger;
     if (data.status && data.status == 200 && data.data.status == 'error') {
         console.error('error!')
         return;
     }
     return data;
 }, err => {
-    var message = "";
+    debugger;
+    var mgs = "";
     if (err.response == undefined || err.response == null) {
-        message = ('服务器请求错误！')
+        mgs = ('服务器请求错误！');
     } else if (err.response.status == 504 || err.response.status == 404) {
-        message = ('服务器找不到！')
-    } else if (err.response.status == 403 || err.response.status == 401) {
-        message = ('权限不足！')
+        mgs = ('服务器找不到！');
+    } else if (err.response.status == 403) {
+        mgs = ('权限不足！');
+    } else if (err.response.status == 401) {
+        window.location.href = '/login';
     } else {
-        message = ('未知错误！')
+        mgs = ('未知错误！');
     }
-    throw message;
-    //return Promise.resolve(err.response);
+    antdMessage.error('服务器正在开小差请稍后再试😭😭😭😭😭');
+    var response = {
+        "success": false,
+        "message": mgs,
+        "totalPage": 0,
+        "totalNumber": 0,
+        "pageIndex": 0,
+        "pageSize": 0,
+        "hasMorePage": false,
+        "data": null
+    }
+    return Promise.resolve({ data: response });
 })
 
 export default axios;

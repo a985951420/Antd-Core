@@ -1,7 +1,6 @@
 import React from 'react';
 import { Layout, Menu, Avatar, Icon } from 'antd';
 import { RemoveStorage } from '../../../tools/tools'
-import PropTypes from 'prop-types'
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 class HeaderBar extends React.PureComponent {
@@ -12,9 +11,8 @@ class HeaderBar extends React.PureComponent {
         this[e.key](e);
     }
     logout(e) {
-        debugger;
         RemoveStorage('token');
-        console.log(this.context)
+        window.location.href = '/';
     }
     setting() {
     }
@@ -34,10 +32,4 @@ class HeaderBar extends React.PureComponent {
         );
     }
 }
-
-
-HeaderBar.contextTypes = {
-    router: PropTypes.object.isRequired
-}
-
 export default HeaderBar;

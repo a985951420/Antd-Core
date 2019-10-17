@@ -4,8 +4,10 @@ import Home from './view/index/index'
 import WrappedNormalLoginForm from './view/login/index'
 import NotFund from './view/nofound/index'
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import AuthRoute from './route/authRoute'
 ReactDOM.render((
     <BrowserRouter >
+        <AuthRoute />
         <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/login" component={WrappedNormalLoginForm} />
