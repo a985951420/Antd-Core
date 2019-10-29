@@ -10,7 +10,7 @@ ReactDOM.render((
         <AuthRoute />
         <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/login" component={WrappedNormalLoginForm} />
+            <Route exact path="/login" component={WrappedNormalLoginForm} />
             <Route component={NotFund} />
         </Switch>
     </BrowserRouter>

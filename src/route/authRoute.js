@@ -1,18 +1,22 @@
 import React from 'react'
-import { GetStorage } from '../tools/tools'
+import { GetStorage, TimeCompare, RemoveStorage } from '../tools/tools'
 import { Redirect } from "react-router-dom";
 class AuthRoute extends React.Component {
     constructor(props) {
         super(props);
     }
     render() {
+        // debugger;
         var token = GetStorage('token');
         if (token != null && token != undefined && token != '') {
-            return <Redirect to='/' />;
+            if (TimeCompare(token.exptime, new Date())) {
+                return <Redirect to='/' />;
+            } else {
+                RemoveStorage('token');
+                return <Redirect to="/login" />
+            }
         } else {
-            return (
-                <Redirect to="/login" />
-            );
+            return <Redirect to="/login" />
         }
     }
 }

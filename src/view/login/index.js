@@ -19,6 +19,7 @@ class NormalLoginForm extends React.Component {
     super(props);
     this.state = {
       loading: false,
+      name: GetStorage(LoginConfig.Login_USERNAME)
     }
   }
   handleSubmit(e) {
@@ -40,17 +41,15 @@ class NormalLoginForm extends React.Component {
     }
     try {
       HttpClient.post(longinUrl, model).then(response => {
-        debugger;
         if (response.success) {
           SetStorage(LoginConfig.TOKEN, response.data)
-          debugger;
           if (rememberMe) {
             SetStorage(LoginConfig.Login_USERNAME, model.username);
           } else {
             RemoveStorage(LoginConfig.Login_USERNAME);
           }
           message.success(response.message);
-          window.location.href = '/';
+          this.props.history.push('/');
         } else {
           this.setState({ loading: false });
           this.props.form.setFields({
@@ -67,8 +66,8 @@ class NormalLoginForm extends React.Component {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-    let name = GetStorage(LoginConfig.Login_USERNAME);
     let checked = false;
+    let name = this.state.name;
     if (name != null && name != undefined && name != '' && name != 'undefined') {
       checked = true;
     } else {

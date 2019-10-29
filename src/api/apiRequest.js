@@ -5,12 +5,16 @@ const antdMessage = message;
 
 //axios.defaults.withCredentials = true;
 axios.defaults.crossDomain = true;
-axios.defaults.headers.post['Accept'] = '*/*'
-axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.headers.post['Accept'] = '*/*';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+//axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
 axios.interceptors.request.use(config => {
     const token = GetStorage('token');
     if (token != null && token != 'null') {
-        config.headers.common = { 'Authorization': `Bearer ${token}` };
+        config.headers.common = { 'Authorization': `Bearer ${token.token}` };
+    } else {
+        //window.location.href = '/';
     }
     return config;
 }, err => {
@@ -18,14 +22,12 @@ axios.interceptors.request.use(config => {
     return Promise.resolve(err);
 })
 axios.interceptors.response.use(data => {
-    debugger;
     if (data.status && data.status == 200 && data.data.status == 'error') {
         console.error('error!')
         return;
     }
     return data;
 }, err => {
-    debugger;
     var mgs = "";
     if (err.response == undefined || err.response == null) {
         mgs = ('服务器请求错误！');

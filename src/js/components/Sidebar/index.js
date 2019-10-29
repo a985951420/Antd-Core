@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
+import './index.css'
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 /**
@@ -12,7 +13,6 @@ class Sidebar extends React.PureComponent {
             selectKey: [],
             openKeys: [],
             mode: 'inline',
-            items: this.props.menu
         }
     }
     onCollapse(e) {
@@ -26,11 +26,13 @@ class Sidebar extends React.PureComponent {
         let selectKey = this.state.selectKey;
         let openKeys = this.state.openKeys;
         let mode = this.state.mode;
-        let menu = this.state.items;
+        let menu = this.props.menu;
         return (
-            <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse.bind(this)}>
+            //collapsible collapsed={collapsed} onCollapse={this.onCollapse.bind(this)}
+            //style={{ background: '#fff' }}
+            <Sider>
                 <div className="logo" />
-                <Menu theme="dark" onClick={this.onMenuClick.bind(this)}
+                <Menu theme="dark"  className="notborder" onClick={this.onMenuClick.bind(this)}
                     defaultSelectedKeys={selectKey}
                     mode={mode}
                     defaultOpenKeys={openKeys}>

@@ -1,26 +1,52 @@
 import React from 'react';
+import './index.css'
 import { Layout } from 'antd';
 import HeaderBar from '../../js/components/HeaderBar/index'
 import Sidebar from '../../js/components/Sidebar/index'
 import ContentTab from '../../js/components/ContentTab/index'
 import FooterBar from '../../js/components/FooterBar/index'
-import sidebarMenu from '../../view/menu/menu'
-import './index.css'
+import { GetMenu } from '../../view/menu/menu'
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       collapsed: false,
+      height: 0,
       tabs: {
         activeKey: "",
         defaultActiveKey: "",
         items: []
       },
       menu: {
-        items: sidebarMenu
+        items: []
       }
     };
     this.onCollapse = this.onCollapse.bind(this);
+    this.onWindowResize = this.onWindowResize.bind(this);
+  }
+  componentWillMount() {
+    window.addEventListener('resize', this.onWindowResize);
+    setTimeout(() => {
+      this.setState({ height: document.body.clientHeight });
+    }, 100);
+
+    GetMenu((AuthorizedMenu) => {
+      this.setState({
+        menu: {
+          items: AuthorizedMenu
+        }
+      });
+    })
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
+  }
+  onWindowResize(e) {
+    var a = document.body.clientHeight;
+    console.log("height：" + a)
+    this.setState({
+      height: a,
+    });
   }
   onCollapse(collapsed) {
     this.setState({ collapsed });
@@ -82,18 +108,18 @@ class Home extends React.Component {
   render() {
     let menu = this.state.menu.items;
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: this.state.height, background: '#fff' }}>
         <Sidebar menu={menu}
           collapsed={this.state.collapsed}
           onMenuClick={this.onMenuClick.bind(this)}
           onCollapse={this.onCollapse.bind(this)} />
         <Layout>
-          <HeaderBar />
-          <ContentTab items={this.state.tabs.items}
+          <HeaderBar {...this.props} />
+          <ContentTab {...this.props} items={this.state.tabs.items}
             activeKey={this.state.tabs.activeKey}
             onMenuClick={this.onMenuClick.bind(this)}
             onEdit={this.onEdit.bind(this)} />
-          <FooterBar />
+          <FooterBar  {...this.props} />
         </Layout>
       </Layout >
     );
