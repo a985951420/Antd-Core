@@ -3,10 +3,12 @@ import { message } from 'antd';
 import { GetStorage } from '../tools/tools'
 const antdMessage = message;
 
-//axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 axios.defaults.crossDomain = true;
 axios.defaults.headers.post['Accept'] = '*/*';
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+// axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+// axios.defaults.headers.post['Access-Control-Allow-Methods'] = 'GET, POST';
+// axios.defaults.headers.post['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
 //axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
 axios.interceptors.request.use(config => {

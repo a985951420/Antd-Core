@@ -99,11 +99,13 @@ class Home extends React.Component {
         activeKey = panes[0].id;
       }
     }
-    this.setState({
-      tabs: {
-        items: panes, activeKey
-      }
-    });
+    setTimeout(() => {
+      this.setState({
+        tabs: {
+          items: panes, activeKey
+        }
+      });
+    }, 100);
   }
   render() {
     let menu = this.state.menu.items;
@@ -119,7 +121,7 @@ class Home extends React.Component {
             activeKey={this.state.tabs.activeKey}
             onMenuClick={this.onMenuClick.bind(this)}
             onEdit={this.onEdit.bind(this)} />
-          <FooterBar  {...this.props} />
+          {/* <FooterBar  {...this.props} /> */}
         </Layout>
       </Layout >
     );

@@ -1,62 +1,103 @@
 import React from 'react';
 import './index.css'
-import { Layout, Tabs } from 'antd';
+import { Layout, Tabs, Icon, Dropdown, Menu } from 'antd';
 const { Content } = Layout;
 const TabPane = Tabs.TabPane;
+const menuItems = (
+    <Menu>
+        <Menu.Item>
+            <div>关闭当前标签页</div>
+        </Menu.Item>
+        <Menu.Item>
+            <div>关闭其他标签页</div>
+        </Menu.Item>
+        <Menu.Item>
+            <div >关闭全部标签页</div>
+        </Menu.Item>
+    </Menu>
+)
 class ContentTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            height: 0,
+            tabKey: ""
         };
-        this.resize = this.resize.bind(this);
-    }
-    componentDidMount() {
-        this.screenChange();
-        setTimeout(() => {
-            this.resize(this);
-        }, 100);
-    }
-    screenChange() {
-        window.addEventListener('resize', this.resize);
-    }
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.resize);
-    }
-    resize(e) {
-        var d = document.getElementById('ContentContainer');
-        var h = d.clientHeight;//d.offsetHeight;//d.clientHeight ||
-        this.setState({ height: h });
-        console.log(h);
     }
     onMenuClick(e) {
         this.props.onMenuClick(e);
     }
     onEdit(key, action) {
+        debugger;
         this.props.onEdit(key, action);
+    }
+    onMouseOver(key) {
+        if (key === undefined || key === "" || key === null) {
+            return;
+        }
+        setTimeout(() => {
+            this.setState({
+                tabKey: key
+            });
+        }, 100);
     }
     render() {
         let activeKey = this.props.activeKey;
         let items = this.props.items;
         return (
-            <Content id='ContentContainer' style={{ margin: '5px 5px 5px 5px', background: '#fff' }} >
-                <Tabs hideAdd
+            <Content style={{ margin: "10px 0px 0px 0px" }} >
+                <Tabs
                     animated={true}
-                    type="editable-card"
                     activeKey={activeKey}
                     onChange={this.onMenuClick.bind(this)}
                     onEdit={this.onEdit.bind(this)}
-                    style={{ overflow: "auto", height: this.state.height }}
+                    tabBarStyle={{ backgroundColor: "#fff" }}
+                    renderTabBar={(props, DefaultTabBar) => {
+                        // 提取tab信息
+                        const tabInfo = [];
+                        items.forEach(item => {
+                            tabInfo.push({
+                                key: item.id,
+                                title: item.name
+                            })
+                        });
+                        return (
+                            <Dropdown overlay={menuItems} trigger={['contextMenu']}>
+                                <div className='dropdownpanle'>
+                                    {
+                                        tabInfo.map((item, index) => (
+                                            <div
+                                                key={item.key}
+                                                onClick={this.onMenuClick.bind(this, item.key)}
+                                                onMouseOver={this.onMouseOver.bind(this, item.key)}
+                                                onMouseOut={this.onMouseOver.bind(this)}
+                                                className={props.activeKey === item.key ? 'activeTab normalTab' : 'normalTab'}
+                                            >
+                                                <div style={{ padding: 5, cursor: "pointer" }} >
+                                                    {item.title}
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <span style={{ display: this.state.tabKey == item.key ? "" : "none" }}>
+                                                        {/* <Icon spin style={{ fontSize: "10px" }} type="sync" />
+                                                        &nbsp;&nbsp; */}
+                                                        <span onClick={this.onEdit.bind(this, item.key, 'remove')}><Icon className='iconStyle' type="close" /></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </Dropdown>
+                        )
+                    }}
                 >
                     {
                         items.map(pane => {
                             return (
-                                <TabPane tab={<span style={{ padding: 5 }}>{pane.name}</span>} key={pane.id}>
-                                    <div style={{ height: (this.state.height - 57), border: "1px sold red", overflowY: "auto", overflowX: "hidden" }}>
+                                <TabPane
+                                    key={pane.id} title={pane.name}>
+                                    <div className={'tabPaneContent'}>
                                         {pane.Component}
                                     </div>
                                 </TabPane>
-
                             );
                         })
                     }
