@@ -1,14 +1,13 @@
-let prefix = "http://localhost:36878";
+let prefix = "http://localhost:5184";
 
 //V1 接口
-//登录接口
-export let longinUrl = prefix + "/api/v1/authorization/login";
-
-//登录接口
-export let accountUrl = prefix + "/api/v1/Account/UserInfo";
-
-//菜单接口
-export let menuUrl = prefix + "/api/v1/system/usermenu";
-
-//菜单列表
-export let menuListUrl = prefix + "/api/v1/system/menulist";
+export let ConfigUrls = {
+  account: {
+    login: prefix + "/api/v1/authorization/login", //登录接口
+    account: prefix + "/api/v1/Account/UserInfo", //账号信息
+  },
+  menu: {
+    accountMenus: prefix + "/api/v1/system/menus", //账号菜单
+    menus: prefix + "/api/v1/system/menulist", //菜单列表
+  },
+};
