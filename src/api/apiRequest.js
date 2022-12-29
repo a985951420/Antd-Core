@@ -14,7 +14,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 // axios.defaults.headers.post["Content-Type"] = ("application/x-www-form-urlencoded");
 axios.interceptors.request.use(
   (config) => {
-    const token = GetStorage(LoginConfig.token);
+    const token = GetStorage(LoginConfig.TOKEN);
     if (token != null && token != "null") {
       config.headers.common = { Authorization: `Bearer ${token}` };
     } else {
@@ -44,6 +44,9 @@ axios.interceptors.response.use(
     } else if (err.response.status == 403) {
       mgs = "权限不足！";
     } else if (err.response.status == 401) {
+      debugger;
+      Log("验证失败清除token 跳转到登录！");
+      RemoveStorage(LoginConfig.TOKEN);
       window.location.href = "/login";
     } else {
       mgs = "未知错误！";

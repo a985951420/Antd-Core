@@ -22,7 +22,6 @@ class NormalLoginForm extends React.Component {
     Log("验证登录信息！");
     var token = GetStorage(LoginConfig.TOKEN);
     if (token != null) {
-      debugger;
       Log("存在登录信息默认登录跳转！");
       this.props.history.push("/");
     } else {
