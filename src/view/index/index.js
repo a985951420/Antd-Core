@@ -1,11 +1,11 @@
-import React from 'react';
-import './index.css'
-import { Layout } from 'antd';
-import HeaderBar from '../../js/components/HeaderBar/index'
-import Sidebar from '../../js/components/Sidebar/index'
-import ContentTab from '../../js/components/ContentTab/index'
-import FooterBar from '../../js/components/FooterBar/index'
-import { GetMenu } from '../../view/menu/menu'
+import React from "react";
+import "./index.css";
+import { Layout } from "antd";
+import HeaderBar from "../../js/components/HeaderBar/index";
+import Sidebar from "../../js/components/Sidebar/index";
+import ContentTab from "../../js/components/ContentTab/index";
+import FooterBar from "../../js/components/FooterBar/index";
+import { GetMenu } from "../../view/menu/menu";
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -15,17 +15,17 @@ class Home extends React.Component {
       tabs: {
         activeKey: "",
         defaultActiveKey: "",
-        items: []
+        items: [],
       },
       menu: {
-        items: []
-      }
+        items: [],
+      },
     };
     this.onCollapse = this.onCollapse.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
   }
   componentWillMount() {
-    window.addEventListener('resize', this.onWindowResize);
+    window.addEventListener("resize", this.onWindowResize);
     setTimeout(() => {
       this.setState({ height: document.body.clientHeight });
     }, 100);
@@ -33,17 +33,17 @@ class Home extends React.Component {
     GetMenu((AuthorizedMenu) => {
       this.setState({
         menu: {
-          items: AuthorizedMenu
-        }
+          items: AuthorizedMenu,
+        },
       });
-    })
+    });
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', this.onWindowResize);
+    window.removeEventListener("resize", this.onWindowResize);
   }
   onWindowResize(e) {
     var a = document.body.clientHeight;
-    console.log("height：" + a)
+    console.log("height：" + a);
     this.setState({
       height: a,
     });
@@ -54,20 +54,20 @@ class Home extends React.Component {
   onMenuClick(e) {
     let id = e;
     let tabactiveKey = "";
-    this.state.tabs.items.map(item => {
+    this.state.tabs.items.map((item) => {
       if (item.id == id) {
-        tabactiveKey = item.id
+        tabactiveKey = item.id;
         return;
       }
     });
     let tabData = {};
-    this.state.menu.items.map(item => {
-      item.childNode.map(subitem => {
+    this.state.menu.items.map((item) => {
+      item.childNode.map((subitem) => {
         if (subitem.id == id) {
           tabData = subitem;
           return;
         }
-      })
+      });
     });
     var tabsitem = this.state.tabs.items;
     if (tabactiveKey == "") {
@@ -76,8 +76,8 @@ class Home extends React.Component {
     this.setState({
       tabs: {
         activeKey: id,
-        items: tabsitem
-      }
+        items: tabsitem,
+      },
     });
   }
   onEdit(key, action) {
@@ -91,7 +91,7 @@ class Home extends React.Component {
         lastIndex = i - 1;
       }
     });
-    const panes = this.state.tabs.items.filter(pane => pane.id !== targetKey);
+    const panes = this.state.tabs.items.filter((pane) => pane.id !== targetKey);
     if (panes.length && activeKey === targetKey) {
       if (lastIndex >= 0) {
         activeKey = panes[lastIndex].id;
@@ -102,28 +102,34 @@ class Home extends React.Component {
     setTimeout(() => {
       this.setState({
         tabs: {
-          items: panes, activeKey
-        }
+          items: panes,
+          activeKey,
+        },
       });
     }, 100);
   }
   render() {
     let menu = this.state.menu.items;
     return (
-      <Layout style={{ minHeight: this.state.height, background: '#fff' }}>
-        <Sidebar menu={menu}
+      <Layout style={{ minHeight: this.state.height, background: "#fff" }}>
+        <Sidebar
+          menu={menu}
           collapsed={this.state.collapsed}
           onMenuClick={this.onMenuClick.bind(this)}
-          onCollapse={this.onCollapse.bind(this)} />
+          onCollapse={this.onCollapse.bind(this)}
+        />
         <Layout>
           <HeaderBar {...this.props} />
-          <ContentTab {...this.props} items={this.state.tabs.items}
+          <ContentTab
+            {...this.props}
+            items={this.state.tabs.items}
             activeKey={this.state.tabs.activeKey}
             onMenuClick={this.onMenuClick.bind(this)}
-            onEdit={this.onEdit.bind(this)} />
+            onEdit={this.onEdit.bind(this)}
+          />
           {/* <FooterBar  {...this.props} /> */}
         </Layout>
-      </Layout >
+      </Layout>
     );
   }
 }

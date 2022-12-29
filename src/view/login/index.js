@@ -11,21 +11,24 @@ import {
 } from "antd";
 import "./index.css";
 import HttpClient from "../../api/httpClient";
-import { ConfigUrls } from "../../api/apiConfig";
-import { SetStorage, RemoveStorage, GetStorage } from "../../tools/tools";
+import { ConfigUrls, LoginConfig } from "../../api/apiConfig";
+import { SetStorage, RemoveStorage, GetStorage, Log } from "../../tools/tools";
 const { Content } = Layout;
 const { Title } = Typography;
-
-const LoginConfig = {
-  Login_USERNAME: "username",
-  Login_PASSWORD: "password",
-  Login_REMEMBER: "remember",
-  TOKEN: "token",
-};
 
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
+    Log("验证登录信息！");
+    var token = GetStorage(LoginConfig.TOKEN);
+    if (token != null) {
+      debugger;
+      Log("存在登录信息默认登录跳转！");
+      this.props.history.push("/");
+    } else {
+      Log("未登录！");
+    }
+
     this.state = {
       loading: false,
       name: GetStorage(LoginConfig.Login_USERNAME),
@@ -49,7 +52,9 @@ class NormalLoginForm extends React.Component {
       password: this.props.form.getFieldValue(LoginConfig.Login_PASSWORD),
     };
     try {
+      Log("开始登录！");
       HttpClient.post(ConfigUrls.account.login, model).then((response) => {
+        Log("登录结果：" + response.success);
         if (response.success) {
           SetStorage(LoginConfig.TOKEN, response.data);
           if (rememberMe) {

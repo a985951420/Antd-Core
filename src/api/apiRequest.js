@@ -1,21 +1,22 @@
 import axios from "axios";
 import { message } from "antd";
-import { GetStorage } from "../tools/tools";
+import { GetStorage, RemoveStorage, Log } from "../tools/tools";
+import { LoginConfig } from "../api/apiConfig";
 const antdMessage = message;
 
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 axios.defaults.crossDomain = true;
 axios.defaults.headers.post["Accept"] = "*/*";
-// axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 // axios.defaults.headers.post['Access-Control-Allow-Methods'] = 'GET, POST';
 // axios.defaults.headers.post['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
-//axios.defaults.headers.post['Content-Type'] = 'application/json';
-// axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+axios.defaults.headers.post["Content-Type"] = "application/json";
+// axios.defaults.headers.post["Content-Type"] = ("application/x-www-form-urlencoded");
 axios.interceptors.request.use(
   (config) => {
-    const token = GetStorage("token");
+    const token = GetStorage(LoginConfig.token);
     if (token != null && token != "null") {
-      config.headers.common = { Authorization: `Bearer ${token.token}` };
+      config.headers.common = { Authorization: `Bearer ${token}` };
     } else {
       //window.location.href = '/';
     }

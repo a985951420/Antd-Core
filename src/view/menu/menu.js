@@ -1,6 +1,6 @@
 import React from "react";
 import HttpClient from "../../api/httpClient";
-import { menuUrl } from "../../api/apiConfig";
+import { ConfigUrls } from "../../api/apiConfig";
 import Authority from "../system/index";
 import Userinfo from "../user/Userinfo";
 
@@ -45,7 +45,7 @@ let authMenus = [];
 //获取
 export function GetMenu(callback, get) {
   if (isPost == false || get) {
-    HttpClient.post(menuUrl).then((response) => {
+    HttpClient.get(ConfigUrls.menu.menus).then((response) => {
       if (response.success) {
         isPost = true;
         var authMenu = response.data;
